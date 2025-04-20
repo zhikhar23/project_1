@@ -3,26 +3,19 @@ import datetime
 from src.masks import get_mask_account, get_mask_card_number
 
 
-def mask_account_card(data: str) -> str:
+def mask_account_card(input_value: str) -> str:
     """Функция маскировк цифр карты и счета"""
-    data = data.split()
-    if "Счет" in data:
-        data[-1] = get_mask_account(data[-1])
+    value_split_list = input_value.split()
+    if "Счет" in value_split_list:
+        value_split_list[-1] = get_mask_account(value_split_list[-1])
 
     else:
-        data[-1] = get_mask_card_number(data[-1])
+        value_split_list[-1] = get_mask_card_number(value_split_list[-1])
 
-    return " ".join(data)
-
-
-data = "Счет 35383033474447895560"
-# print (mask_account_card(data))
+    return " ".join(value_split_list)
 
 
-def get_date(date: str) -> str:
-    y = datetime.datetime.fromisoformat(date)
-    return y.strftime("%d.%m.%Y")
-
-
-date = "2024-03-11T02:26:18.671407"
-print(get_date(date))
+def get_date(input_date: str) -> str:
+    """Функция для возврата даты в нужном формате"""
+    date = datetime.datetime.fromisoformat(input_date)
+    return date.strftime("%d.%m.%Y")
