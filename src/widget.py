@@ -19,4 +19,3 @@ def get_date(input_date: str) -> str:
     """Функция для возврата даты в нужном формате"""
     date = datetime.datetime.fromisoformat(input_date)
     return date.strftime("%d.%m.%Y")
-
