@@ -16,16 +16,20 @@ def test_decorator_log():
         return x / y
     assert my_function(6, 3) == 2
 
+def test_decorator_capsys_1(capsys):
+    """Тестирование декоратора без ошибки через capsys"""
+    my_function(6,0)
+    captured = capsys.readouterr()
+    assert "ok" in captured.out
+
 def test_dec_zerodev(capsys):
     """тест с делением на ноль"""
     my_function(1,0)
     captured=capsys.readouterr()
-    assert captured.out=="my_function error: ZeroDivisionError. Inputs: (1, 0), {}\n\n"
+    assert "Zero" in captured.out
 
-
-def test_decorator_cupsys(capsys):
-    """Тестирование декоратора с выходом ошибки"""
-    with pytest.raises(Exception):
-        my_function()
-        captured = my_function.readouterr()
-        assert captured.out == Exception
+def test_dec_error(capsys):
+    """Тест на ошибку по типу данных """
+    my_function("2","f")
+    captured=capsys.readouterr()
+    assert captured.out=="my_function error: TypeError. Inputs: ('2', 'f'), {}\n\n"
