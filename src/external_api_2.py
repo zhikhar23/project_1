@@ -34,3 +34,5 @@ def transaction_summ(transact, code):
                         return result
               else:
                     return f"Не успешный запрос, код ошибки: {response.status_code}"
+for transact in get_transactions(json_path="..\data\operations.json"):
+    print(transaction_summ(transact,currency_code))
