@@ -1,7 +1,7 @@
 from typing import Generator, Any
 
 
-def filter_by_currency(transactions:list[dict[str,Any]], currency:str)->Generator[dict]:
+def filter_by_currency(transactions: list[dict[str, Any]], currency: str) -> Generator[dict]:
     """Функция возвращает итератор, который поочередно выдает транзакции, где валюта операции
     соответствует заданной (например, USD)."""
     for item in transactions:
