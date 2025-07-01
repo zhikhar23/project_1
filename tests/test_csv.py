@@ -1,4 +1,3 @@
-
 from unittest.mock import patch, mock_open
 from src.csv_loader import loader
 

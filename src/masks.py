@@ -11,23 +11,17 @@ masks_logger.addHandler(file_handler)
 
 def get_mask_card_number(card_number: str) -> str:
     """Функция возвращает замаскированный номер карты"""
-    masks_logger.info("Получаем номер карты")
     if len(card_number) == 16 and card_number.isdigit():
-        masks_logger.info("Проверка длинны ввода и формата")
         return f"{card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}"
     else:
-        masks_logger.error("Некорректные данные ввода")
         return "Неверный номер карты"
 
 
 def get_mask_account(account_number: str) -> str:
     """Функция возвращает замаскированный номер счёта"""
-    masks_logger.info("Получаем номер счёта")
     if len(account_number) == 20 and account_number.isdigit():
-        masks_logger.info("Проверка длинны ввода и формат")
         return f"**{account_number[-4:]}"
     else:
-        masks_logger.error("Некорректные данные ввода")
         return "Неверный номер счёта"
 
 
