@@ -1,6 +1,8 @@
 import json
 import logging
 import os
+import re
+from collections import Counter
 
 logging.basicConfig(encoding="utf-8", filemode="w")
 utils_log = logging.getLogger("utils_log")
@@ -35,3 +37,26 @@ def get_transactions(json_path: str) -> list:
     except (OSError, IOError):
         utils_log.error("Неуспешный запрос")
         return []
+
+
+def process_bank_search(data: list[dict], search: str) -> list[dict]:
+    """Функция проходится по транзакциям и собирает нужные в список(для csv,xslx)"""
+    pattern = re.compile(search, flags=re.IGNORECASE)
+    result = []
+
+    for tr in data:
+        if "description" in tr:
+            description = tr["description"]
+            if pattern.search(description):
+                result.append(tr)
+    return result
+
+
+def process_bank_operations(data: list[dict], categories: list) -> dict:
+    """Функция проходится по транзакциям и собирает нужные в список(для json)"""
+    res = []
+    for tr in data:
+        if tr["description"].lower() in categories:
+            res.append(tr)
+    a = [tr["description"] for tr in res]
+    return Counter(a)
