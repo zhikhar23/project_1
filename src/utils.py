@@ -40,8 +40,9 @@ def get_transactions(json_path: str) -> list:
 
 
 def process_bank_search(data: list[dict], search: str) -> list[dict]:
-    result = []
+    """Функция проходится по транзакциям и собирает нужные в список(для csv,xslx)"""
     pattern = re.compile(search, flags=re.IGNORECASE)
+    result = []
 
     for tr in data:
         if "description" in tr:
@@ -52,6 +53,7 @@ def process_bank_search(data: list[dict], search: str) -> list[dict]:
 
 
 def process_bank_operations(data: list[dict], categories: list) -> dict:
+    """Функция проходится по транзакциям и собирает нужные в список(для json)"""
     res = []
     for tr in data:
         if tr["description"].lower() in categories:

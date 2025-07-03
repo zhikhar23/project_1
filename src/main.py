@@ -8,6 +8,7 @@ from xslx_loader import xslx_loader
 
 
 def main():
+    """Основная функция запуска программы,пользовательский интерфейс"""
     while True:
         user_choice = input(
             """
@@ -54,15 +55,19 @@ def main():
         break
 
     print("Распечатываю итоговый список транзакций...")
-    print(f"Всего банковских операций в выборке: {len(data)}")
+    if len(data) == 0:
+        print("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
+    else:
+        print(f"Всего банковских операций в выборке: {len(data)}")
     for tr in data:
         print(f"{get_date(tr['date'])} {tr['description']}")
-        print(f"{mask_account_card(tr["from"])}")
+        print(f"{mask_account_card(tr["to"])}")
         amount = tr.get("amount") if tr.get("amount") else tr.get("operationAmount").get("amount")
         print(f"Сумма {amount}")
 
 
 def get_data(user_choice: str) -> list[dict]:
+    """функция обработки данных от пользователя(выбор файла загрузки)"""
     data = []
     if user_choice == "1":
         data = get_transactions("../data/operations.json")
@@ -77,14 +82,19 @@ def get_data(user_choice: str) -> list[dict]:
 
 
 def filter_data_by_status(user_filter: str, data: list) -> list | None:
-    if user_filter.upper() not in ["EXECUTED", "CANCELED", "PENDING"]:
-        print("Введите корректный статус EXECUTED, CANCELED, PENDING")
-        return None
-    else:
+    """функция обработки данных от пользователя(фильтр по статусу транзакции"""
+    if user_filter.upper() in ["EXECUTED", "CANCELED", "PENDING"]:
         return [tr for tr in data if tr.get("state") == user_filter]
+        # print(f'Статус операции {user_filter} недоступен')
+        # return None
+    else:
+        print(f"Статус операции {user_filter} недоступен")
+        return None
+        # return [tr for tr in data if tr.get("state") == user_filter]
 
 
 def sort_by_user_state(user_sort_state, date):
+    """функция обработки данных от пользователя(сортировка)"""
     if user_sort_state.lower() == "да":
         while True:
             user_sort = input("Отсортировать по возрастанию или по убыванию?")
@@ -101,11 +111,13 @@ def sort_by_user_state(user_sort_state, date):
 
 
 def process_bank_operations(data: list[dict], categories: list) -> dict:
+    """функция подсчёта транзакций"""
     category = [i.get("description") for i in data]
     category_count = Counter(category)
 
 
 def filter_by_rub(only_rub_filter, user_choice, data):
+    """функция обработки данных от пользователя,рублевые транзакции"""
     if only_rub_filter.lower() == "да":
         if user_choice == "1":
             res = []
@@ -119,6 +131,7 @@ def filter_by_rub(only_rub_filter, user_choice, data):
 
 
 def filter_by_description(filter_state, data):
+    """функция обработки данных от пользователя(поиск по нужному слову)"""
     if filter_state == "да":
         user_search = input("Введите слово для поиска")
         data = process_bank_search(data, user_search)
